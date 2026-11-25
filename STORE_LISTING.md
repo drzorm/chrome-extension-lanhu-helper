@@ -69,19 +69,19 @@
 ## 素材
 
 - 商店图标：`icons/icon-128.png`；高清备用 `icons/icon-512.png`；矢量原稿 `icons/logo.svg`。
-- 旧 `icons/favicon.png` 为蓝湖官方素材，仅为历史文件保留，不在 manifest 中引用，也不包含在构建包中，不得用于商店宣传。
+- 旧 `icons/favicon.png` 为蓝湖官方素材，不在本仓库发布，也不在 manifest 中引用、不包含在构建包中，不得用于商店宣传。
 - 使用自有或获准公开的测试设计制作实际功能截图，展示结构树、复制 JSON、图片参数，不包含客户设计、令牌或隐私信息。
 - 准备至少一张符合后台要求的截图（通常使用 1280×800 或 640×400）；如要求宣传图，另制作 440×280 等对应规格，最终以后台要求为准。
 
 ## 构建、验收与提交
 
 ```powershell
-pnpm test
+pnpm install --frozen-lockfile
 pnpm lint
 pnpm build
 ```
 
-加载 `dist/chrome-extension-lanhu-helper/` 而非源码目录，执行 [真实 Chrome 冒烟清单](validation/chrome-smoke.md)，重点验证 HTTPS 权限收窄后图层及动态图片子域仍可读取。模拟测试不能替代真实浏览器验收；当前缓存未验证设计身份，同标签切稿属于已知风险，必须核验，不通过就先修复再发布。
+加载 `dist/chrome-extension-lanhu-helper/` 而非源码目录，执行真实 Chrome 冒烟人工核验（内部冒烟清单不随本仓库发布，按下列要点逐项核对），重点验证 HTTPS 权限收窄后图层及动态图片子域仍可读取。模拟测试不能替代真实浏览器验收；当前缓存未验证设计身份，同标签切稿属于已知风险，必须核验，不通过就先修复再发布。
 
 上传 `dist/chrome-extension-lanhu-helper.zip`。构建禁用“含ID”调试功能，不读取其历史偏好且复制时固定排除节点 ID；源码开发版保留该功能。构建仅白名单打包运行 JS、CSS、manifest 和被引用的图标，不带 `node_modules`、测试、原始设计缓存、政策源文件或整个仓库。隐私政策需单独公开托管。确认上传包根目录直接包含 manifest，而非再套一层目录。
 

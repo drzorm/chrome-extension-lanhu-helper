@@ -12,7 +12,7 @@ Chrome Manifest V3 扩展，用于查看蓝湖设计稿结构并复制节点 JSO
 - [隐私政策](PRIVACY.md) · [Chrome Web Store 发布指南](STORE_LISTING.md)
 - [复制 JSON 约定](#复制-json-约定) · [转换细则](CONVERSION_RULES.md)
 - [状态与限制](#状态与限制) · [故障排除](#故障排除)
-- [代码结构](#代码结构) · [开发与验证](#开发与验证)
+- [代码结构](#代码结构) · [开发与构建](#开发与构建)
 
 ## 功能
 
@@ -62,7 +62,7 @@ Chrome Manifest V3 扩展，用于查看蓝湖设计稿结构并复制节点 JSO
 - 同设计内切换图片参数或接收新数据会保留备注、删除标记、折叠、选中和滚动状态；切换设计或刷新页面不保留。结构重排后不保证备注跟随业务对象，重绘会关闭未提交的备注弹窗。
 - 重复 ID、循环共享 ID 或无原始 ID 的节点可在面板内操作，但不猜测官方 DOM 实例，不执行页面联动或删除。
 - 删除需确认，并通过 Backspace 请求官方页面删除；只有目标 DOM 持续消失至少 120ms 才移除树项，1.5 秒超时或期间页面/设计更新则保留。此检查不保证服务端保存成功，也不提供撤销。
-- 复杂曲线、照片、截图、无法验证的裁剪/旋转/效果继续使用图片。真实 JSON 还原验证见 [验证目录](validation/README.md)。
+- 复杂曲线、照片、截图、无法验证的裁剪/旋转/效果继续使用图片。
 - 文字排版依赖本机字体；跨平台缺少原字体会改变换行位置、度量和对齐。输出将 `PingFangSC-Regular` 转换为 `PingFangSC-Medium`，并把蓝湖导出的 PostScript 风格名字改写为浏览器可匹配的家族名：`MicrosoftYaHei*` → `Microsoft Ya Hei`、`AlibabaPuHuiTi-Bold` → `Alibaba PuHuiTi`、`DIN-Bold` → `DIN`、`DINPro-Medium` → `DINPro`、`FZFW-QingYinTiS-E--GB1-0` → `FZFW Qing Yin TiS E`、`AdobeHeitiStd-Regular` → `Adobe Heiti Std`。显式 `fontWeight` 始终优先，仅 `MicrosoftYaHeiSemibold` 在源字重为 `normal` 时补 `600`；其余原始 `fontFamily` 保留，`FontName` 等源稿占位符文名不改写并可由 `getFontRewriteStats` 统计；插件无法提供字体文件。请合法安装或加载原字体；使用回退字体后需重新检查排版。
 
 ## 故障排除
@@ -85,30 +85,24 @@ Chrome Manifest V3 扩展，用于查看蓝湖设计稿结构并复制节点 JSO
 | `tree_state.js` / `tree_renderer.js` / `tree_helper.js` | 树状态、增量渲染与查找 |
 | `content_copy_formatter.js` / `clipboard_helper.js` | JSON 格式化与剪贴板操作 |
 | `content_sync_helper.js` | 页面定位与删除确认 |
-| `*.test.js` / `scripts/fixtures/` | 自动化测试与回归样本 |
 
-## 开发与验证
+## 开发与构建
 
-在仓库根目录执行（Node.js、pnpm；像素验证另需 Windows / PowerShell 7）：
+在仓库根目录执行（Node.js、pnpm）：
 
 ```powershell
-pnpm test
+pnpm install --frozen-lockfile
 pnpm lint
+pnpm build
 ```
 
-`lint` 仅检查 JS/JSON 语法，不检查语义或未定义变量。集成测试使用模拟 DOM/Chrome API，不能替代真实 Chrome 验收；发布前执行 [真实 Chrome 冒烟清单](validation/chrome-smoke.md)，官方删除仅在明确授权的可丢弃设计中测试。
+`lint` 只做 JS/JSON 语法检查，不检查语义或未定义变量。`build` 生成扩展构建产物：
+`dist/chrome-extension-lanhu-helper/`（可直接加载的解压目录）与
+`dist/chrome-extension-lanhu-helper.zip`（Chrome Web Store 上传包）；构建产物随仓库提交，
+改动源码后需重新执行 `pnpm build` 并提交。
 
-JSON 还原验证统一通过 [`validate-lanhu-json`](.agents/skills/validate-lanhu-json/SKILL.md) 执行，默认从 [targets.json](validation/targets.json) 挑选3个不同项目/页面类型的目标，也支持清单全量、指定目标或详情 URL。清单全量不代表蓝湖项目全量；多稿冻结计划、保留阻塞目标并生成批次汇总。
+本仓库只公开扩展核心源码、图标、构建入口与上架文档。自动化测试、JSON 还原验证工具、设计证据与
+私有缓存属于本地开发仓库（其中可能含私有设计数据），不在此公开。
 
-```text
-/skill:validate-lanhu-json
-/skill:validate-lanhu-json 验证 targets.json 全部目标
-/skill:validate-lanhu-json <设计详情URL>
-```
-
-- [验证入口与权威规则](validation/README.md)：固定工具机械渲染、截图、比较及人工判级，不自动修复布局。
-- [原始缓存回归](validation/cache.md)：定稿优先复用已确认版本的原始数据，每轮重新转换、渲染和比较；不替代真实扩展端到端验收。
-- [截图与独立复核](validation/execution.md)：本地渲染截图默认使用 `pnpm validate:screenshot` 隔离 headless 入口；MCP 用于蓝湖采集和打开最终报告页，具体参数与约束见执行约定。
-- [验证状态入口](validation/STATUS.md)：历史结论已重置，后续以重新验证的记录为准；发现的问题按 [issue 模板](validation/issue-template.md) 重新记录。
-
-原始设计、缓存和日期归档可能含私有数据，默认不提交 Git；历史案例不随文档整理删除或改判。
+上架流程、素材与验收清单见 [Chrome Web Store 发布指南](STORE_LISTING.md)，数据处理说明见
+[隐私政策](PRIVACY.md)。
