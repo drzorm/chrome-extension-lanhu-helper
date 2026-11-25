@@ -1,0 +1,13 @@
+{
+  "name": "chrome-extension-lanhu-helper",
+  "version": "1.1.1",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "lint": "node scripts/lint.js",
+    "build": "node scripts/build.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

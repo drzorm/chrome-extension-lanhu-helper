@@ -1,0 +1,429 @@
+/* content.css - 蓝湖Schema查看器样式 */
+
+/* 面板容器 */
+.lanhu-helper-panel {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  width: 320px;
+  max-height: 500px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  font-size: 13px;
+  z-index: 999999;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.lanhu-helper-image-warning {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-top: 1px solid #eee;
+  background: #fafafa;
+  color: #666;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* 面板头部 */
+.lanhu-helper-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: move;
+  user-select: none;
+}
+
+.lanhu-helper-title {
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.lanhu-helper-title::before {
+  content: "📄";
+}
+
+.lanhu-helper-scale,
+.lanhu-helper-format {
+  height: 24px;
+  margin-right: 8px;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  font: inherit;
+}
+
+.lanhu-helper-include-ids {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 24px;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  margin: 0 8px 0 0;
+  padding: 0;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  background: #fff;
+  color: #999;
+  cursor: pointer;
+}
+
+.lanhu-helper-include-ids svg {
+  display: block;
+}
+
+.lanhu-helper-include-ids[aria-pressed="true"] {
+  border-color: #2196f3;
+  background: #e3f2fd;
+  color: #2196f3;
+}
+
+.lanhu-helper-include-ids:focus-visible {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+.lanhu-helper-close {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.lanhu-helper-close:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.lanhu-helper-open {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  min-width: 48px;
+  height: 32px;
+  border: 1px solid #d6d6d6;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+  color: #333;
+  cursor: pointer;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 999999;
+}
+
+.lanhu-helper-open:hover {
+  background: #f5f5f5;
+}
+
+.lanhu-helper-open[hidden],
+.lanhu-helper-panel[hidden] {
+  display: none;
+}
+
+/* 面板内容 */
+.lanhu-helper-content {
+  padding: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* 树形结构 */
+.lanhu-helper-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lanhu-helper-tree ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 8px;
+}
+
+.lanhu-helper-tree-item {
+  margin: 2px 0;
+}
+
+.lanhu-helper-tree-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.lanhu-helper-tree-node:hover,
+.lanhu-helper-tree-node.remark-active {
+  background: #f0f0f0;
+}
+
+.lanhu-helper-tree-node.selected {
+  background: #e3f2fd;
+  box-shadow: inset 2px 0 0 #2196f3;
+}
+
+.lanhu-helper-tree-toggle {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  cursor: pointer;
+  user-select: none;
+  color: #999;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lanhu-helper-tree-toggle.expanded::before {
+  content: "▼";
+}
+
+.lanhu-helper-tree-toggle.collapsed::before {
+  content: "▶";
+}
+
+.lanhu-helper-tree-toggle.leaf {
+  visibility: hidden;
+}
+
+.lanhu-helper-tree-icon {
+  margin-right: 6px;
+  font-size: 12px;
+}
+
+.lanhu-helper-tree-icon.page::before {
+  content: "📄";
+}
+
+.lanhu-helper-tree-icon.frame::before {
+  content: "🖼️";
+}
+
+.lanhu-helper-tree-icon.component::before {
+  content: "🧩";
+}
+
+.lanhu-helper-tree-icon.layer::before {
+  content: "📦";
+}
+
+.lanhu-helper-tree-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  line-height: 1.1;
+  color: #333;
+  user-select: text;
+  word-break: break-all;
+}
+
+.lanhu-helper-tree-label-image {
+  display: block;
+  max-width: 150px;
+  max-height: 50px;
+  object-fit: contain;
+  background: #efefef;
+}
+
+/* 加载状态 */
+.lanhu-helper-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: #999;
+}
+
+.lanhu-helper-loading::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  border: 2px solid #e0e0e0;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: lanhu-spin 0.8s linear infinite;
+}
+
+@keyframes lanhu-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 空状态 */
+.lanhu-helper-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+}
+
+/* 错误状态 */
+.lanhu-helper-error {
+  padding: 16px;
+  background: #fff3f3;
+  color: #c00;
+  border-radius: 4px;
+  margin: 8px;
+}
+
+/* 节点操作按钮 */
+.lanhu-helper-remark,
+.lanhu-helper-delete,
+.lanhu-helper-copy {
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.lanhu-helper-remark {
+  position: relative;
+}
+
+.lanhu-helper-tree-node:hover .lanhu-helper-remark,
+.lanhu-helper-tree-node:hover .lanhu-helper-delete,
+.lanhu-helper-tree-node:hover .lanhu-helper-copy,
+.lanhu-helper-tree-node.remark-active .lanhu-helper-remark,
+.lanhu-helper-tree-node.remark-active .lanhu-helper-delete,
+.lanhu-helper-tree-node.remark-active .lanhu-helper-copy,
+.lanhu-helper-remark.has-description {
+  opacity: 1;
+}
+
+.lanhu-helper-remark.has-description::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e53935;
+}
+
+.lanhu-helper-description-popover {
+  position: fixed;
+  width: 220px;
+  padding: 8px;
+  border: 1px solid #d6d6d6;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+  cursor: default;
+  z-index: 1000000;
+}
+
+.lanhu-helper-description-popover::after {
+  content: "";
+  position: absolute;
+  left: var(--lanhu-helper-description-arrow-left, 190px);
+  bottom: -5px;
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid #d6d6d6;
+  border-bottom: 1px solid #d6d6d6;
+  background: #fff;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.lanhu-helper-description-textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 76px;
+  resize: vertical;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  padding: 6px;
+  color: #333;
+  font-size: 12px;
+  outline: none;
+}
+
+.lanhu-helper-description-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.lanhu-helper-description-actions button {
+  height: 24px;
+  line-height: 24px;
+  padding: 0 10px;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  font: 12px;
+}
+
+.lanhu-helper-description-confirm {
+  border-color: #2196f3 !important;
+  background: #2196f3 !important;
+  color: #fff !important;
+}
+
+/* Toast提示 */
+.lanhu-helper-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 1000000;
+  opacity: 0;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+  pointer-events: none;
+}
+
+.lanhu-helper-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 自定义样式 */
+.redLine {
+  outline: 1px solid red;
+}
